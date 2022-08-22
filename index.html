@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        const threeSum = function (nums) {
+            let res = []
+            nums.sort((a, b) => a - b)
+            const len = nums.length
+            for (let i = 0; i < len - 2; i++) {
+                let j = i + 1
+                let k = len - 1
+
+                if (i > 0 && nums[i] === nums[i - 1]) {
+                    continue
+                }
+
+                while (j < k) {
+                    if (nums[i] + nums[j] + nums[k] < 0) {
+                        j++
+                        while (j < k && nums[j] === nums[j - 1]) {
+                            j++
+                        }
+                    } else if (nums[i] + nums[j] + nums[k] > 0) {
+                        k--
+                        while (j < k && nums[k] === nums[k + 1]) {
+                            k--
+                        }
+                    } else {
+                        res.push([nums[i], nums[j], nums[k]])
+                        j++
+                        k--
+
+                        while (j < k && nums[j] === nums[j - 1]) {
+                            j++
+                        }
+
+                        while (j < k && nums[k] === nums[k + 1]) {
+                            k--
+                        }
+                    }
+                }
+            }
+            return res
+        }
+    </script>
+</body>
+
+</html>
