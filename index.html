@@ -10,46 +10,25 @@
 
 <body>
     <script>
-        const threeSum = function (nums) {
-            let res = []
-            nums.sort((a, b) => a - b)
-            const len = nums.length
-            for (let i = 0; i < len - 2; i++) {
-                let j = i + 1
-                let k = len - 1
-
-                if (i > 0 && nums[i] === nums[i - 1]) {
-                    continue
+        var preorderTraversal = function (root) {
+            const res = []
+            if (!root) {
+                return res
+            }
+            const stack = []
+            stack.push(root)
+            while (stack.length) {
+                const cur = stack.pop()
+                res.push(cur.val)
+                if (cur.right) {
+                    stack.push(cur.right)
                 }
-
-                while (j < k) {
-                    if (nums[i] + nums[j] + nums[k] < 0) {
-                        j++
-                        while (j < k && nums[j] === nums[j - 1]) {
-                            j++
-                        }
-                    } else if (nums[i] + nums[j] + nums[k] > 0) {
-                        k--
-                        while (j < k && nums[k] === nums[k + 1]) {
-                            k--
-                        }
-                    } else {
-                        res.push([nums[i], nums[j], nums[k]])
-                        j++
-                        k--
-
-                        while (j < k && nums[j] === nums[j - 1]) {
-                            j++
-                        }
-
-                        while (j < k && nums[k] === nums[k + 1]) {
-                            k--
-                        }
-                    }
+                if (cur.left) {
+                    stack.push(cur.left)
                 }
             }
             return res
-        }
+        };
     </script>
 </body>
 
