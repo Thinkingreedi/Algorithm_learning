@@ -151,29 +151,45 @@ var findNumberIn2DArray = function(matrix, target) {
 #### 2. 替换空格
    ```
    题目：
-
-   请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为 We Are Happy.则经过替换之后的字符串为 We%20
-   Are%20Happy
-
+   请实现一个函数，将一个字符串中的空格替换成“%20”。例如，当字符串为 We Are Happy.则经过替换之后的字符串为 We%20Are%20Happy
 
    思路：
 
    使用正则表达式，结合字符串的 replace 方法将空格替换为 “%20”
-
    str.replace(/\s/g,"%20")
+   
+var replaceSpace = function(s) {
+  return s.replace(/ /g, "%20");
+ };
    ```
 
 #### 3. 从尾到头打印链表
    ```
    题目：
-
    输入一个链表，从尾到头打印链表每个节点的值。
 
-
    思路：
-
-   利用栈来实现，首先根据头结点以此遍历链表节点，将节点加入到栈中。当遍历完成后，再将栈中元素弹出并打印，以此来实现。栈的
-   实现可以利用 Array 的 push 和 pop 方法来模拟。
+   利用栈来实现，首先根据头结点以此遍历链表节点，将节点加入到栈中。当遍历完成后，再将栈中元素弹出并打印，以此来实现。栈的实现可以利用 Array 的 push 和 pop 方法来模拟。
+   
+var reversePrint = function(head) {
+    let cur = head
+    let i = 0
+    //遍历到链尾
+    while(cur!=null){
+        i++
+        cur=cur.next
+    }
+    const arr = new Array(i)
+    //按照倒序装入数组
+    cur = head
+    i--
+    while(i>-1){
+        arr[i]=cur.val
+        cur=cur.next
+        i--
+    }
+    return arr
+};
    ```
 
 #### 4. 重建二叉树
