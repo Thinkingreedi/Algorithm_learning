@@ -195,47 +195,78 @@ var reversePrint = function(head) {
 #### 4. 重建二叉树
    ```
    题目：
-
    输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输
    入前序遍历序列 {1,2,4,7,3,5,6,8} 和中序遍历序列 {4,7,2,1,5,3,8,6}，则重建二叉树并返回。
 
-
    思路：
+   利用递归的思想来求解，首先先序序列中的第一个元素一定是根元素。然后我们去中序遍历中寻找到该元素的位置，找到后该元素的左边部分就是根节点的左子树，右边部分就是根节点的右子树。因此我们可以分别截取对应的部分进行子树的递归构建。使用这种方式的时间复杂度为 O(n)，空间复杂度为 O(logn)。
+   
+var buildTree = function(preorder, inorder) {
+    const len = preorder.length
+    function build(preL,preR,inL,inR){
+        if(preL>preR){
+            return null
+        }
+        const root = new TreeNode()
+        //目标结点映射的是当前前序遍历序列的头部结点
+        root.val = preorder[preL]
+        //定位到根结点在中序遍历序列中的位置
+        const k = inorder.indexOf(root.val)
+        //计算出左子树中结点的个数
+        const numLeft = k - inL
+        root.left = build(preL+1,preL+numLeft,inL,k-1)
+        root.right = build(preL+numLeft+1,preR,k+1,inR)
+        return root
+    }
+    return build(0,len-1,0,len-1)
 
-   利用递归的思想来求解，首先先序序列中的第一个元素一定是根元素。然后我们去中序遍历中寻找到该元素的位置，找到后该元素的左
-   边部分就是根节点的左子树，右边部分就是根节点的右子树。因此我们可以分别截取对应的部分进行子树的递归构建。使用这种方式的
-   时间复杂度为 O(n)，空间复杂度为 O(logn)。
+};
    ```
 
 #### 5. 用两个栈实现队列
    ```
    题目：
-
    用两个栈来实现一个队列，完成队列的 Push 和 Pop 操作。
 
 
    思路：
-
-   队列的一个基本特点是，元素先进先出。通过两个栈来模拟时，首先我们将两个栈分为栈1和栈2。当执行队列的 push 操作时，直接
-   将元素 push 进栈1中。当队列执行 pop 操作时，首先判断栈2是否为空，如果不为空则直接 pop 元素。如果栈2为空，则将栈1中
-   的所有元素 pop 然后 push 到栈2中，然后再执行栈2的 pop 操作。
-
+   队列的一个基本特点是，元素先进先出。通过两个栈来模拟时，首先我们将两个栈分为栈1和栈2。当执行队列的 push 操作时，直接将元素 push 进栈1中。当队列执行 pop 操作时，首先判断栈2是否为空，如果不为空则直接 pop 元素。如果栈2为空，则将栈1中的所有元素 pop 然后 push 到栈2中，然后再执行栈2的 pop 操作。
    扩展：
-
    当使用两个长度不同的栈来模拟队列时，队列的最大长度为较短栈的长度的两倍。
+   
+var CQueue = function() {
+    this.stackA = []
+    this.stackB = []
+};
+//入队操作，直接压入入队栈
+CQueue.prototype.appendTail = function(value) {
+    this.stackA.push(value)
+};
+//出队操作需要优先检查出队栈是否有数据，若无，需要从入队栈倒入后再操作
+CQueue.prototype.deleteHead = function() {
+    if(this.stackB.length){
+        return this.stackB.pop()
+    }else{
+        while(this.stackA.length){
+            this.stackB.push(this.stackA.pop())
+        }
+        if(!this.stackB.length){
+            return -1
+        }else{
+            return this.stackB.pop()
+        }
+    }
+};
    ```
 
 #### 6. 旋转数组的最小数字
    ```
    题目：
-
    把一个数组最开始的若干个元素搬到数组的末尾，我们称之为数组的旋转。 输入一个非递减排序的数组的一个旋转，输出旋转数组的
    最小元素。 例如数组{3,4,5,1,2}为{1,2,3,4,5}的一个旋转，该数组的最小值为1。 NOTE：给出的所有元素都大于0，若数组大
    小为0，请返回0。
 
-
    思路：
-
    （1）我们输入的是一个非递减排序的数组的一个旋转，因此原始数组的值递增或者有重复。旋转之后原始数组的值一定和一个值相
        邻，并且不满足递增关系。因此我们就可以进行遍历，找到不满足递增关系的一对值，后一个值就是旋转数组的最小数字。
 
@@ -247,14 +278,26 @@ var reversePrint = function(head) {
 #### 7. 斐波那契数列
    ```
    题目：
-
    大家都知道斐波那契数列，现在要求输入一个整数 n，请你输出斐波那契数列的第 n 项。 n<=39
 
-
    思路：
-
-   斐波那契数列的规律是，第一项为0，第二项为1，第三项以后的值都等于前面两项的和，因此我们可以通过循环的方式，不断通过叠
-   加来实现第 n 项值的构建。通过循环而不是递归的方式来实现，时间复杂度降为了 O(n)，空间复杂度为 O(1)。
+   斐波那契数列的规律是，第一项为0，第二项为1，第三项以后的值都等于前面两项的和，因此我们可以通过循环的方式，不断通过叠加来实现第 n 项值的构建。通过循环而不是递归的方式来实现，时间复杂度降为了 O(n)，空间复杂度为 O(1)。
+ 
+var fib = function(n) {
+    if(n===0){
+        return 0
+    }
+    let num1=1
+    let num2=1
+    let tmp =1
+    while(n>2){
+        tmp = (num1+num2)%1000000007
+        num1 = (num2)
+        num2 = tmp
+        n--
+    }
+    return tmp
+};
    ```
 
 #### 8. 跳台阶
