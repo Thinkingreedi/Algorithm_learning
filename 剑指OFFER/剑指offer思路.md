@@ -351,7 +351,21 @@ var cuttingRope = function(n) {
 };
 ~~~
 
+#### 15. 二进制中1的个数
 
+~~~
+	问题：
+	编写一个函数，输入是一个无符号整数（以二进制串的形式），返回其二进制表达式中数字位数为 '1' 的个数（也被称为 汉明重量).）。
+	
+	思路：
+	正则表达式、位运算
+	
+var hammingWeight = function(n) {
+    const r =  n.toString(2).match(/1/g)
+    return r ? r.length : 0
+};
+	
+~~~
 
 
 
