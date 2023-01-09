@@ -367,6 +367,91 @@ var hammingWeight = function(n) {
 	
 ~~~
 
+#### 16. 数值的整数次方
+   ```
+    题目：
+    实现 pow(x, n) ，即计算 x 的 n 次幂函数。不得使用库函数，同时不需要考虑大数问题。
+
+    思路：
+    首先我们需要判断n正负和零取值三种情况，根据不同的情况通过递归来实现。
+    
+var myPow = function(x, n) {
+    if(n===0)return 1;
+    if(n===1)return x;
+    if(n===-1)return 1/x;
+    if(n%2===0){
+        let a = myPow(x,n/2);
+        return a*a;
+    }else{
+        let b = myPow(x,(n-1)/2);
+        return b*b*x;
+    }
+};
+    
+  
+   ```
+
+#### 17. 打印从1到最大的n位数
+
+~~~
+	题目：
+	输入数字 n，按顺序打印出从 1 到最大的 n 位十进制数。比如输入 3，则打印出 1、2、3 一直到最大的 3 位数 999。
+
+	思路：
+	1.暴力解法，直接用for循环进行输出
+	2.针对大数问题n，无法通过Math.pow得出的情况下，我们找到规律，知道n代表位数，然后就可以得出max值为m个'9'的组合。然后for循环。
+	
+var printNumbers = function(n) {
+    let arr = [];
+    for(let i=1;i<Math.pow(10,n);i++){
+        arr[i-1] = i;
+    }
+    return arr;
+};
+-------------------------------------------------------
+var printNumbers = function(n) {
+    let max = '';
+    let arr = [];
+    while(n--){
+        max += '9';
+    }
+    for(let i = 1,l=max-'0';i<=l;i++){
+        arr[i-1] = i;
+    }
+    return arr;
+};
+~~~
+
+#### 18. 删除链表的节点
+
+~~~
+	题目：
+	给定单向链表的头指针和一个要删除的节点的值，定义一个函数删除该节点。返回删除后的链表的头节点。
+	
+	思路：
+	用一个dummy结点(人为制造出来的第一个结点的前驱结点)[头指针？]来解决这个问题
+	
+var deleteNode = function(head, val) {
+    let dummy = new ListNode() 
+    dummy.next = head   
+    let cur = dummy 
+    while(cur.next) {
+        if(cur.next.val === val) {
+            cur.next = cur.next.next
+            break;
+        } else {
+            cur = cur.next
+        }
+    }
+    return dummy.next;
+};
+~~~
+
+
+
+
+
+
 
 
 
@@ -452,17 +537,7 @@ var hammingWeight = function(n) {
     如：1100&1011=1000 
    ```
 
-#### 12. 数值的整数次方
-   ```
-    题目：
 
-    给定一个 double 类型的浮点数 base 和 int 类型的整数 exponent。求 base 的 exponent 次方。
-
-
-    思路：
-
-    首先我们需要判断 exponent 正负和零取值三种情况，根据不同的情况通过递归来实现。 
-   ```
 
 #### 13. 调整数组顺序使奇数位于偶数前面
    ```
