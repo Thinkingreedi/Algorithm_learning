@@ -633,13 +633,135 @@ var isSameTree = function(A, B) {
 };
 ~~~
 
+#### 27. 二叉树的镜像
 
+~~~
+	题目：
+	请完成一个函数，输入一个二叉树，该函数输出它的镜像。
+	
+	思路：
+	翻转二叉树
+	
+var mirrorTree = function(root) {
+    if(!root){
+        return root;
+    }
+    let right = mirrorTree(root.right);
+    let left = mirrorTree(root.left)
+    root.left = right;
+    root.right = left;
+    return root;
+};
+~~~
 
+#### 28. 对称的二叉树
 
+~~~
+	题目：
+	请实现一个函数，用来判断一棵二叉树是不是对称的。如果一棵二叉树和它的镜像一样，那么它是对称的。
+	
+	思路：
+	通过二叉树的前序遍历和其对称二叉树的前序遍历做比较，如果两个序列是一样的，那么该二叉树就是对称的。n1.left和n2.right做比较，就相当与对称二叉树在做比较。
 
+var isSymmetric = function(root) {
+    return isSymmetricCore(root,root)
+};
+var isSymmetricCore = function(n1,n2) {
+    if(!n1 && !n2) 
+        return true;
+    if(!n1 || !n2) 
+        return false;
+    if(n1.val!==n2.val)
+        return false;
+    return isSymmetricCore(n1.left,n2.right) && isSymmetricCore (n1.right,n2.left)
+};
+~~~
 
+#### 29. 顺时针打印矩阵
 
+~~~
+	题目：
+	输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+	
+	思路：
+	几个关键位置 四个拐弯角 top 、right、bottom、left 顺时针 [left, right] -> [top, bottom] -> [right, left] -> [bottom, top]一次性遍历完 当res的长度等于row * col 即所有元素遍历完成 终止while循环
 
+var spiralOrder = function(matrix) {
+     if (!matrix.length) return [];
+    const res = [], row = matrix.length, col = matrix[0].length, size = row * col;
+    let t = 0, r = col - 1, b = row - 1, l = 0;
+    while (res.length !== size) {
+        // 从左往右
+        for (let i = l; i <= r; i++) res.push( matrix[t][i] )
+        t++
+        // 从上往下
+        for (let i = t; i <= b; i++) res.push( matrix[i][r] )
+        r--
+        // 检查一次是否遍历完
+        if (res.length === size) break
+        // 从右往左
+        for (let i = r; i >= l; i--) res.push( matrix[b][i] )
+        b--
+        // 从下往上
+        for (let i = b; i >= t; i--) res.push( matrix[i][l] )
+        l++
+    }
+    return res
+};
+~~~
+
+#### 30. 包含min函数的栈
+
+~~~
+	题目：
+	定义栈的数据结构，请在该类型中实现一个能够得到栈的最小元素的 min 函数在该栈中，调用 min、push 及 pop 的时间复杂度都是 O(1)。
+	
+	思路：
+	利用辅助栈来实现。
+	
+const MinStack = function() {
+    this.stack = [];
+    // 定义辅助栈
+    this.stack2 = [];
+};
+
+/** 
+ * @param {number} x
+ * @return {void}
+ */
+MinStack.prototype.push = function(x) {
+    this.stack.push(x);
+    // 若入栈的值小于当前最小值，则推入辅助栈栈顶
+    if(this.stack2.length == 0 || this.stack2[this.stack2.length-1] >= x){
+        this.stack2.push(x);
+    }
+};
+
+/**
+ * @return {void}
+ */
+MinStack.prototype.pop = function() {
+    // 若出栈的值和当前最小值相等，那么辅助栈也要对栈顶元素进行出栈，确保最小值的有效性
+    if(this.stack.pop() == this.stack2[this.stack2.length-1]){
+        this.stack2.pop();
+    }
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.top = function() {
+    return this.stack[this.stack.length-1];
+};
+
+/**
+ * @return {number}
+ */
+MinStack.prototype.min = function() {
+    // 辅助栈的栈顶，存的就是目标中的最小值
+    return this.stack2[this.stack2.length-1];
+};
+~~~
 
 
 
@@ -705,50 +827,6 @@ var isSameTree = function(A, B) {
     思路：
     依旧是斐波那契数列的应用
  
-   ```
-
-#### 18. 二叉树的镜像
-   ```
-    题目：
-
-    操作给定的二叉树，将其变换为源二叉树的镜像。 
-
-    思路：
-
-    从根节点开始遍历，首先通过临时变量保存左子树的引用，然后将根节点的左右子树的引用交换。然后再递归左右节点的子树交换。
-   ```
-
-#### 19. 顺时针打印矩阵
-   ```
-    题目：
-
-    输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字，
-    例如，如果输入如下矩阵： 1 2 3 4
-    										 5 6 7 8 
-    										 9 10 11 12 
-    										 13 14 15 16 
-    则依次打印出数字1,2,3,4,8,12,16,15,14,13,9,5,6,7,11,10
-
-
-    思路：
-
-    （1）根据左上角和右下角可以定位出一次要旋转打印的数据。一次旋转打印结束后，往对角分别前进和后退一个单位，可以确定下一
-        次需要打印的数据范围。
-
-    （2）使用模拟魔方逆时针解法，每打印一行，则将矩阵逆时针旋转 90 度，打印下一行，依次重复。
-   ```
-
-#### 20. 定义一个栈，实现 min 函数
-   ```
-    题目：
-
-    定义栈的数据结构，请在该类型中实现一个能够得到栈最小元素的 min 函数。
-
-
-    思路：
-    
-    使用一个辅助栈，每次将数据压入数据栈时，就把当前栈里面最小的值压入辅助栈当中。这样辅助栈的栈顶数据一直是数据栈中最小
-    的值。
    ```
 
 #### 21. 栈的压入弹出
