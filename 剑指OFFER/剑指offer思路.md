@@ -763,11 +763,135 @@ MinStack.prototype.min = function() {
 };
 ~~~
 
+#### 31. 栈的压入、弹出序列
 
+~~~
+	题目：
+	输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如，序列 {1,2,3,4,5} 是某栈的压栈序列，序列 {4,5,3,2,1} 是该压栈序列对应的一个弹出序列，但 {4,3,5,1,2} 就不可能是该压栈序列的弹出序列。
+	
+	思路:
+	我们可以使用一个辅助栈的方式来实现，首先遍历压栈顺序，依次将元素压入辅助栈中，每次压入元素后我们首先判断该元素是否与出栈顺序中的此刻位置的元素相等，如果不相等，则将元素继续压栈，如果相等，则将辅助栈中的栈顶元素出栈，出栈后，将出栈顺序中的位置后移一位继续比较。当压栈顺序遍历完成后，如果辅助栈不为空，则说明该出栈顺序不正确。
+	
+var validateStackSequences = function(pushed, popped) {
+    const stack = [];
+    let index = 0;
+    for(let i=0,len=pushed.length-1;i<=len;i++){
+        stack.push(pushed[i])
+        while(stack.length!==0&&stack[stack.length-1]===popped[index]){
+            stack.pop();
+            index++;
+        }
+    }
+    return !stack.length
+};	
+~~~
 
+#### 32 - I. 从上到下打印二叉树
 
+~~~
+	题目：
+	从上到下打印出二叉树的每个节点，同一层的节点按照从左到右的顺序打印。
+	
+	思路：
+	本质上是二叉树的层序遍历，可以通过队列来实现。首先将根节点入队。然后对队列进行出队操作，每次出队时，将出队元素的左右子节点依次加入到队列中，直到队列长度变为 0 时，结束遍历。
 
+var levelOrder = function(root) {
+    if(!root){
+        return [];
+    }
+    const queue = [root];
+    const arr = [];
+    while(queue.length){
+        for(let i = 0;i<queue.length;i++){
+            let cur =  queue.shift();
+            arr.push(cur.val)
+            if(cur.left!==null){
+                queue.push(cur.left)
+            }
+            if(cur.right!==null){
+                queue.push(cur.right)
+            }
+        }
+    }
+    return arr;
+};
+~~~
 
+#### 32 - II. 从上到下打印二叉树 II
+
+~~~
+	题目：
+	从上到下按层打印二叉树，同一层的节点按从左到右的顺序打印，每一层打印到一行。
+	
+	思路：
+	大致同上，增添换行。
+	
+var levelOrder = function(root) {
+    if(!root){
+        return [];
+    }
+    const queue = [root];
+    const res = [];
+    let level = 0;
+    while(queue.length){
+        res[level] = [];
+        let levelNum = queue.length;
+        while(levelNum--){
+            const cur =  queue.shift();
+            res[level].push(cur.val);
+            if(cur.left!==null){
+                queue.push(cur.left)
+            }
+            if(cur.right!==null){
+                queue.push(cur.right)
+            }
+        }
+        level++;
+    }
+    return res;
+};
+~~~
+
+#### 32 - III. 从上到下打印二叉树 III
+
+~~~
+	题目：
+	请实现一个函数按照之字形顺序打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右到左的顺序打印，第三行再按照从左到右的顺序打印，其他行以此类推。
+	
+	思路：
+	添加一层判断，通过数组push和unshift方法进行数据入栈处理。
+	
+var levelOrder = function(root) {
+    if(!root){
+        return [];
+    }
+    const queue = [root];
+    const res = [];
+    let level = 0;
+    while(queue.length){
+        res[level] = [];
+        let levelNum = queue.length;
+        while(levelNum--){
+            const cur =  queue.shift();
+
+            if(level%2 !== 0){
+                res[level].unshift(cur.val);
+            }else{
+                res[level].push(cur.val);
+            }
+
+            if(cur.left!==null){
+                queue.push(cur.left)
+            }
+            if(cur.right!==null){
+                queue.push(cur.right)
+            }
+        }
+        level++;
+    }
+    return res;
+};
+~~~
 
 
 
@@ -827,35 +951,6 @@ MinStack.prototype.min = function() {
     思路：
     依旧是斐波那契数列的应用
  
-   ```
-
-#### 21. 栈的压入弹出
-   ```
-    题目：
-
-    输入两个整数序列，第一个序列表示栈的压入顺序，请判断第二个序列是否为该栈的弹出顺序。假设压入栈的所有数字均不相等。例如
-    序列 1,2,3,4,5 是某栈的压入顺序，序列 4,5,3,2,1 是该压栈序列对应的一个弹出序列，但 4,3,5,1,2 就不可能是该压栈序
-    列的弹出序列。（注意：这两个序列的长度是相等的）
-
-
-    思路：
-
-    我们可以使用一个辅助栈的方式来实现，首先遍历压栈顺序，依次将元素压入辅助栈中，每次压入元素后我们首先判断该元素是否与出
-    栈顺序中的此刻位置的元素相等，如果不相等，则将元素继续压栈，如果相等，则将辅助栈中的栈顶元素出栈，出栈后，将出栈顺序中
-    的位置后移一位继续比较。当压栈顺序遍历完成后，如果辅助栈不为空，则说明该出栈顺序不正确。
-   ```
-
-#### 22. 从上往下打印二叉树
-   ```
-    题目：
-
-    从上往下打印出二叉树的每个节点，同层节点从左至右打印。
-
-
-    思路：
-
-    本质上是二叉树的层序遍历，可以通过队列来实现。首先将根节点入队。然后对队列进行出队操作，每次出队时，将出队元素的左右子
-    节点依次加入到队列中，直到队列长度变为 0 时，结束遍历。
    ```
 
 #### 23. 二叉搜索树的后序遍历
@@ -1604,4 +1699,4 @@ MinStack.prototype.min = function() {
    ```
 
 剑指 offer 相关资料可以参考：
-[《JS 版剑指 offer》](https://www.cnblogs.com/wuguanglin/p/code-interview.html)
+[《JS 版剑指 offer》](https://www.cnblogs.com/wuguanglin/p/code-interview.html)s
