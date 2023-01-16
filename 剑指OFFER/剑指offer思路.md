@@ -893,7 +893,56 @@ var levelOrder = function(root) {
 };
 ~~~
 
+#### 33. 二叉搜索树的后序遍历序列
 
+~~~
+	题目：
+	输入一个整数数组，判断该数组是不是某`二叉搜索树`的后序遍历结果。如果是则返回 true，否则返回 false。假设输入的数组的任意两个数字都互不相同。
+	
+	思路：
+	二叉搜索树的左子树均小于根节点，右子树均大于根节点。 判断二叉搜索树的后续遍历是否合法，只需判断右子树是否均大于根节点，左子树是否均小于根节点。 显然对于每个节点的操作都是一样的(问题拆解成子问题))，所以使用递归来实现。
+	
+var verifyPostorder = function (postorder) {
+    let len = postorder.length;
+    if (len < 2) return true
+    let root = postorder[len - 1];
+    let i = 0
+    for (; i < len - 1; i++) {
+        if (postorder[i] > root) break
+    }
+    let result = postorder.slice(i, len - 1).every(x => x > root);
+    if (result) {
+        return verifyPostorder(postorder.slice(0, i)) && verifyPostorder(postorder.slice(i, len - 1))
+    } else {
+        return false
+    }
+};
+~~~
+
+#### 34. 二叉树中和为某一值的路径
+
+~~~
+	题目：给你二叉树的根节点 root 和一个整数目标和 targetSum ，找出所有 从根节点到叶子节点 路径总和等于给定目标和的路径。叶子节点 是指没有子节点的节点。
+	
+	思路：
+	关于slice的使用：这里传递的tmp路径是一个数组，如果不用slice复制的话实际上不同分支之间传递的是同一个引用地址，导致不同路径之间会互相污染。 slice返回的是一个原数组的浅拷贝，类似要记录路径的题目都需要slice一下。
+
+
+var pathSum = function(root, sum) {
+  if (root === null) return [];
+  const res = [];
+  const DFS = (root, sum, tmp) => {
+    if (root.val === sum && !root.left && !root.right) {
+        res.push(tmp);
+    }
+    tmp.push(root.val);
+    if (root.left) DFS(root.left, sum - root.val, tmp.slice());
+    if (root.right) DFS(root.right, sum - root.val, tmp.slice());
+  }
+  DFS(root, sum, []);
+  return res;
+};
+~~~
 
 
 
@@ -951,34 +1000,6 @@ var levelOrder = function(root) {
     思路：
     依旧是斐波那契数列的应用
  
-   ```
-
-#### 23. 二叉搜索树的后序遍历
-   ```
-    题目：
-
-    输入一个整数数组，判断该数组是不是某二叉搜索树的后序遍历的结果。如果是则输出 Yes，否则输出 No。假设输入的数组的任意两
-    个数字都互不相同。
-
-
-    思路：
-
-    对于一个合法而二叉树的后序遍历来说，最末尾的元素为根元素。该元素前面的元素可以划分为两个部分，一部分为该元素的左子树，
-    所有元素的值比根元素小，一部分为该元素的右子树，所有的元素的值比该根元素大。并且每一部分都是一个合法的后序序列，因此我
-    们可以利用这些特点来递归判断。
-   ```
-
-#### 24. 二叉树中和为某一值路径
-   ```
-    题目：
-
-    输入一颗二叉树和一个整数，打印出二叉树中结点值的和为输入整数的所有路径。路径定义为从树的根结点开始往下一直到叶结点所经
-    过的结点形成一条路径。
-
-
-    思路：
-
-    通过对树进行深度优先遍历，遍历时保存当前节点的值并判断是否和期望值相等，如果遍历到叶节点不符合要求则回退处理。
    ```
 
 #### 25. 复杂链表的复制
