@@ -1140,11 +1140,120 @@ var maxSubArray = function(nums) {
 };
 ~~~
 
+#### 43. 1～n 整数中 1 出现的次数(待探究)
 
+~~~
+	题目：
+	输入一个整数 n ，求1～n这n个整数的十进制表示中1出现的次数。例如，输入12，1～12这些整数中包含1 的数字有1、10、11和12，1一共出现了5次。
+	
+	
+	思路：
+	数学规律
+	
+var countDigitOne = function(n) {
+    let high = Math.floor(n / 10), cur = n % 10, low = 0,  digit = 1
+    let res = 0
+    while(high != 0 || cur != 0) {
+        if (cur == 0) res += high * digit
+        else if (cur == 1) res += high * digit + low + 1
+        else res += (high + 1) * digit
+        low += cur * digit
+        cur = high % 10
+        high = Math.floor(high / 10)
+        digit *= 10
+    }
+    return res
+};	
+~~~
 
+#### 44. 数字序列中某一位的数字
 
+~~~
+	题目：
+	数字以0123456789101112131415…的格式序列化到一个字符序列中。在这个序列中，第5位（从下标0开始计数）是5，第13位是1，第19位是4，等等。请写一个函数，求任意第n位对应的数字。
+	
+	思路：
+	找规律
+	
+var findNthDigit = function(n) {
+  // 0-9
+  if (n>=0 && n <=9) return n
+  // 10-99       90    Math.pow(10, 1) * 9个
+  // 100-999     900   Math.pow(10, 2) * 9个
+  //...... 
+  var start = 9
+  var i = 1
+  // 求出第n个字符所在的数字是几位
+  while(start < n) {
+      i += 1
+      start += Math.pow(10, i - 1) * 9 * i
+  }
+  // 最后一个字符与第n个字符之间相差多少个数
+  var diff_n = Math.floor((start - n) / i)
+  // 余数
+  var diff_y = (start - n) % i
+  // 由规律可知最后一个数为Math.pow(10, i) - 1
+  // 相差diff_n个数切余数为diff_y
+  return `${Math.pow(10, i) - 1 - diff_n}`.charAt(i - 1 - diff_y)
+};	
+~~~
 
+#### 46. 把数字翻译成字符串
 
+~~~
+	题目：
+	给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
+	
+	思路：
+	动态规划
+	
+var translateNum = function(num) {
+    let str = num + ''
+    let dp = [1,1]
+    for(let i = 1;i<str.length;i++){
+        let temp = parseInt(str.slice(i-1,i+1),10)||0
+        if(temp >=10 && temp <= 25){
+            dp[i+1]=dp[i]+dp[i-1]
+        }else{
+            dp[i+1] = dp[i]
+        }
+    }
+    return dp[dp.length-1]
+};	
+~~~
+
+#### 4
+
+~~~
+	题目：
+	
+	
+	思路：
+	
+	
+~~~
+
+#### 4
+
+~~~
+	题目：
+	
+	
+	思路：
+	
+	
+~~~
+
+#### 4
+
+~~~
+	题目：
+	
+	
+	思路：
+	
+	
+~~~
 
 
 
@@ -1161,23 +1270,6 @@ var maxSubArray = function(nums) {
 
 
 # temp. ----------------
-
-#### 31. 整数中1出现的次数（待深入理解）
-   ```
-    题目：
-
-    求出1~13的整数中1出现的次数，并算出100~1300的整数中1出现的次数？为此他特别数了一下1~13中包含1的数字有1、10、11、
-    12、13因此共出现6次，但是对于后面问题他就没辙了。ACMer希望你们帮帮他，并把问题更加普遍化，可以很快的求出任意非负整
-    数区间中1出现的次数。
-
-    思路：
-
-    （1）第一种思路是直接遍历每个数，然后将判断每个数中 1 的个数，一直叠加。
-
-    （2）第二种思路是求出1出现在每位上的次数，然后进行叠加。
-   ```
-   详细资料可以参考：
-   [《从1到n整数中1出现的次数：O(logn)算法》](https://blog.csdn.net/yi_Afly/article/details/52012593)
 
 
 #### 32. 把数组排成最小的数
