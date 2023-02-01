@@ -1324,6 +1324,92 @@ var firstUniqChar = function(s) {
 };
 ~~~
 
+#### 51. 数组中的逆序对
+
+~~~
+	题目：
+	在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
+	
+	思路：
+	（1）第一种思路是直接求解的方式，顺序扫描整个数组。每扫描到一个数字的时候，逐个比较该数字和它后面的数字的大小。如果后面的数字比它小，则这两个数字就组成了一个逆序对。假设数组中含有 n 个数字。由于每个数字都要和 O(n）个数字作比较，因此这个算法的时间复杂度是 O(n^2)。
+    （2）第二种方式是使用归并排序的方式，通过利用归并排序分解后进行合并排序时，来进行逆序对的统计，这一种方法的时间复杂度为 O(nlogn)。
+	
+var reversePairs = function(nums) {
+    let res = 0;
+    const length = nums.length;
+    for (let i = 0; i < length; ++i) {
+        for (let j = i + 1; j < length; ++j) {
+            nums[i] > nums[j] && ++res;
+        }
+    }
+    return res;
+};
+-----------------------------------------------------------
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var reversePairs = function(nums) {
+    // 归并排序
+    let sum = 0;
+    mergeSort(nums);
+    return sum;
+
+    function mergeSort (nums) {
+        if(nums.length < 2) return nums;
+        const mid = parseInt(nums.length / 2);
+        let left = nums.slice(0,mid);
+        let right = nums.slice(mid);
+        return merge(mergeSort(left), mergeSort(right));
+    }
+
+    function merge(left, right) {
+        let res = [];
+        let leftLen = left.length;
+        let rightLen = right.length;
+        let len = leftLen + rightLen;
+        for(let index = 0, i = 0, j = 0; index < len; index ++) {
+            if(i >= leftLen) res[index] = right[j ++];
+            else if (j >= rightLen) res[index] = left[i ++];
+            else if (left[i] <= right[j]) res[index] = left[i ++];
+            else {
+                res[index] = right[j ++];
+                sum += leftLen - i;//在归并排序中唯一加的一行代码
+            }
+        }
+        return res;
+    }
+};
+
+作者：静尾
+链接：https://leetcode.cn/problems/shu-zu-zhong-de-ni-xu-dui-lcof/solutions/155093/ni-yi-ding-neng-kan-dong-de-gui-bing-jie-fa-by-tan/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+~~~
+
+#### 52. 两个链表的第一个公共节点
+
+~~~
+	题目：
+	输入两个链表，找出它们的第一个公共节点。
+	
+	
+	思路：
+	双指针
+	
+var getIntersectionNode = function(headA, headB) {
+  let a = headA,
+    b = headB;
+  while (a != b) {
+    // a 走一步，如果走到 headA 链表末尾，转到 headB 链表
+    a = a != null ? a.next : headB;
+    // b 走一步，如果走到 headB 链表末尾，转到 headA 链表
+    b = b != null ? b.next : headA;
+  }
+  return a;
+};	
+~~~
+
 #### 5
 
 ~~~
@@ -1335,38 +1421,13 @@ var firstUniqChar = function(s) {
 	
 ~~~
 
-#### 5
 
-~~~
-	题目：
-	
-	
-	思路：
-	
-	
-~~~
 
-#### 5
 
-~~~
-	题目：
-	
-	
-	思路：
-	
-	
-~~~
 
-#### 5
 
-~~~
-	题目：
-	
-	
-	思路：
-	
-	
-~~~
+
+
 
 
 
@@ -1385,49 +1446,6 @@ var firstUniqChar = function(s) {
 
 
 # temp. ----------------
-
-#### 35. 数组中的逆序对
-   ```
-    题目：
-
-    在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对
-    的总数 P。
-
-
-    思路：
-
-    （1）第一种思路是直接求解的方式，顺序扫描整个数组。每扫描到一个数字的时候，逐个比较该数字和它后面的数字的大小。如果
-        后面的数字比它小，则这两个数字就组成了一个逆序对。假设数组中含有 n 个数字。由于每个数字都要和 O(n）个数字作比
-        较，因此这个算法的时间复杂度是 O(n^2)。
-
-    （2）第二种方式是使用归并排序的方式，通过利用归并排序分解后进行合并排序时，来进行逆序对的统计，这一种方法的时间复杂
-        度为 O(nlogn)。
-   ```
-   详细资料可以参考：
-   [《数组中的逆序对》](http://wiki.jikexueyuan.com/project/for-offer/question-thirty-six.html)
-
-#### 36. 两个链表的第一个公共结点
-   ```
-    题目：
-
-    输入两个链表，找出它们的第一个公共结点。
-
-    思路：
-
-    （1）第一种方法是在第一个链表上顺序遍历每个结点，每遍历到一个结点的时候，在第二个链表上顺序遍历每个结点。如果在第二
-        个链表上有一个结点和第一个链表上的结点一样，说明两个链表在这个结点上重合，于是就找到了它们的公共结点。如果第一
-        个链表的长度为 m，第二个链表的长度为 n。这一种方法的时间复杂度是 O(mn）。
-
-    （2）第二种方式是利用栈的方式，通过观察我们可以发现两个链表的公共节点，都位于链表的尾部，以此我们可以分别使用两个栈
-        ，依次将链表元素入栈。然后在两个栈同时将元素出栈，比较出栈的节点，最后一个相同的节点就是我们要找的公共节点。这
-        一种方法的时间复杂度为 O(m+n)，空间复杂度为 O(m+n)。
-
-    （3）第三种方式是，首先分别遍历两个链表，得到两个链表的长度。然后得到较长的链表与较短的链表长度的差值。我们使用两个
-        指针来分别对两个链表进行遍历，首先将较长链表的指针移动 n 步，n 为两个链表长度的差值，然后两个指针再同时移动，
-        判断所指向节点是否为同一节点。这一种方法的时间复杂度为 O(m+n)，相同对于上一种方法不需要额外的空间。
-   ```
-   详细资料可以参考：
-   [《两个链表的第一个公共结点》](http://wiki.jikexueyuan.com/project/for-offer/question-thirty-seven.html)
 
 #### 37. 数字在排序数组中出现的次数
    ```
