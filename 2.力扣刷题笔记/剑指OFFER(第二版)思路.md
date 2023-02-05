@@ -1563,6 +1563,158 @@ var isBalanced = function(root) {
 };	
 ~~~
 
+#### 56 - I. 数组中数字出现的次数
+
+~~~
+	题目：
+	一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
+	
+	思路：
+	1.使用map
+	2.先排序后遍历
+	
+var singleNumbers = function(nums) {
+    const arr = [];
+    let map = new Map();
+    for(let i = 0;i<nums.length;i++){
+        let cur = nums[i];
+        if(map.has(cur)){
+            map.set(cur,false);
+        }else{
+            map.set(cur,true);
+        }
+    }
+    for([key,value] of map){
+        if(value){
+            arr.push(key);
+        }
+    }
+    return arr;
+};
+--------------------------------------------------------------
+var singleNumbers = function(nums) {
+    let numsSort = nums.sort((a,b)=>{ return a-b }),result = []
+    for(let i=0;i<numsSort.length;i++){
+        if(numsSort[i]===numsSort[i+1]){
+            i++
+        }else{
+            result.push(numsSort[i])
+            if(result.length===2) break
+        }
+    }
+    return result
+};
+~~~
+
+#### 56 - II. 数组中数字出现的次数 II
+
+~~~
+	题目：
+	在一个数组 nums 中除一个数字只出现一次之外，其他数字都出现了三次。请找出那个只出现一次的数字。
+	
+	思路：
+	使用map
+	
+var singleNumber = function(nums) {
+    let map = new Map();
+    for(let i = 0;i<nums.length;i++){
+        let cur = nums[i];
+        if(map.has(cur)){
+            map.set(cur,false);
+        }else{
+            map.set(cur,true);
+        }
+    }
+    for([key,value] of map){
+        if(value){
+            return key;
+        }
+    }
+};
+~~~
+
+#### 57. 和为s的两个数字
+
+~~~
+	题目：
+	输入一个递增排序的数组和一个数字s，在数组中查找两个数，使得它们的和正好是s。如果有多对数字的和等于s，则输出任意一对即可。
+	
+	思路：
+	1.两数之和转换为两数之差，巧妙利用map
+	2.双指针法
+
+var twoSum = function(nums, target) {
+    const map = new Map();
+    let len = nums.length;
+    for(let i = 0;i < len;i++){
+        let value = target - nums[i];
+        if(map.has(value)){
+            return [value,nums[i]];
+        }else{
+            map.set(nums[i],i)
+        }
+    }
+};
+--------------------------------------------------------------
+var twoSum = function(nums, target) {
+    var arr = [];
+    var left = 0;
+    var right = nums.length - 1;
+    while(left < right){
+        var temp = nums[left] + nums[right];
+        if(temp == target){
+            arr.push(nums[left]);
+            arr.push(nums[right]);
+            break;
+        }else if(temp < target){
+            left ++;
+        }else{
+            right --;
+        }
+    }
+    return arr;
+};
+~~~
+
+#### 57 - II. 和为s的连续正数序列
+
+~~~
+	题目：
+	输入一个正整数 target ，输出所有和为 target 的连续正整数序列（至少含有两个数）。序列内的数字由小到大排列，不同序列按照首个数字从小到大排列。
+	
+	思路：
+	滑动窗口（双指针）
+	
+var findContinuousSequence = function(target) {
+    let l=1
+    let r=2
+    let sum = 3
+    let res=[]
+    // 滑动窗口框架
+    while(l<r){
+        if(sum===target){
+            let ans =[]
+            for(let k=l;k<=r;k++){
+                ans[k-l]=k
+            }
+            res.push(ans)
+            // 等于的情况 我们可以继续窗口往右搜索 同时缩小左边的
+             sum=sum-l
+             l++
+        } else if(sum>target){
+            // 大于的条件 缩小窗口 sum已经加过了
+            sum=sum-l
+            l++
+        } else {
+            // 小于的情况 滑动窗口继续扩大
+            r++
+            sum=sum+r
+        }
+    }
+    return res
+};	
+~~~
+
 #### 5
 
 ~~~
@@ -1598,46 +1750,9 @@ var isBalanced = function(root) {
 
 
 
+
+
 # temp. ----------------
-
-#### 41. 和为 S 的连续正数序列
-   ```
-    题目：
-
-    小明很喜欢数学，有一天他在做数学作业时，要求计算出9~16的和，他马上就写出了正确答案是100。但是他并不满足于此，他在想究
-    竟有多少种连续的正数序列的和为100（至少包括两个数）。没多久，他就得到另一组连续正数和为100的序列：18,19,20,21,22。
-    现在把问题交给你，你能不能也很快的找出所有和为 S 的连续正数序列？Good Luck!输出描述：输出所有和为S的连续正数序列。序
-    列内按照从小至大的顺序，序列间按照开始数字从小到大的顺序。
-
-
-    思路：
-
-    维护一个正数序列数组，数组中初始只含有值1和2，然后从3依次往后遍历，每遍历到一个元素则将这个元素加入到序列数组中，然后
-    判断此时序列数组的和。如果序列数组的和大于所求值，则将第一个元素（最小的元素弹出）。如果序列数组的和小于所求值，则继续
-    往后遍历，将元素加入到序列中继续判断。当序列数组的和等于所求值时，打印出此时的正数序列，然后继续往后遍历，寻找下一个连
-    续序列，直到数组遍历完成终止。
-   ```
-   详细资料可以参考：
-   [《和为 s 的连续正数序列》](http://wiki.jikexueyuan.com/project/for-offer/question-forty-one.html)
-
-
-#### 42. 和为 S 的两个数字
-   ```
-    题目：
-
-    输入一个递增排序的数组和一个数字 S，在数组中查找两个数，是的他们的和正好是 S，如果有多对数字的和等于 S，输出两个数
-    的乘积最小的。输出描述：对应每个测试案例，输出两个数，小的先输出。
-
-
-    思路：
-
-    首先我们通过规律可以发现，和相同的两个数字，两个数字的差值越大，乘积越小。因此我们只需要从数组的首尾开始找到第一对和
-    为 s 的数字对进行了。因此我们可以使用双指针的方式，左指针初始指向数组的第一个元素，右指针初始指向数组的最后一个元素
-    。然后首先判断两个指针指向的数字的和是否为 s ，如果为 s ，两个指针指向的数字就是我们需要寻找的数字对。如果两数的和
-    比 s 小，则将左指针向左移动一位后继续判断。如果两数的和比 s 大，则将右指针向右移动一位后继续判断。
-   ```
-   详细资料可以参考：
-   [《和为 S 的字符串》](https://www.cnblogs.com/wuguanglin/p/FindNumbersWithSum.html)
 
 
 #### 43. 左旋转字符串
