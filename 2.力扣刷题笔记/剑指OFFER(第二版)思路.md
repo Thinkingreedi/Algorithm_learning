@@ -1715,6 +1715,67 @@ var findContinuousSequence = function(target) {
 };	
 ~~~
 
+#### 58 - I. 翻转单词顺序
+
+~~~
+	题目：
+	输入一个英文句子，翻转句子中单词的顺序，但单词内字符的顺序不变。为简单起见，标点符号和普通字母一样处理。例如输入字符串"I am a student. "，则输出"student. a am I"。
+	
+	思路：
+	1.使用库函数
+	2.双端队列
+
+var reverseWords = function(s) {
+    return s.trim().split(' ').filter(item => item!='').reverse().join(' ')
+};
+--------------------------------------------------------------
+var reverseWords = function(s) {
+    s = s.trim();
+    var str =[...s];
+    var res = [];
+    var i = 0;
+    var tempStr = '';
+    while(i<str.length){
+        if(str[i] === ' '){
+            if(tempStr.trim().length){
+                res.unshift(tempStr);
+                tempStr='';
+            }
+        } else {
+            tempStr+=str[i];
+        }
+        i++;
+    }
+    res.unshift(tempStr);
+    return res.join(' ')
+};
+~~~
+
+#### 58 - II. 左旋转字符串
+
+~~~
+	题目：
+	字符串的左旋转操作是把字符串前面的若干个字符转移到字符串的尾部。请定义一个函数实现字符串左旋转操作的功能。比如，输入字符串"abcdefg"和数字2，该函数将返回左旋转两位得到的结果"cdefgab"。
+	
+	思路：
+	使用slice方法截取
+	
+var reverseLeftWords = function(s, n) {
+    return s.slice(n,s.length) + s.slice(0,n);
+};	
+~~~
+
+#### 5
+
+~~~
+	题目：
+	
+	
+	思路：
+	
+	
+~~~
+
 #### 5
 
 ~~~
@@ -1752,36 +1813,9 @@ var findContinuousSequence = function(target) {
 
 
 
+
+
 # temp. ----------------
-
-
-#### 43. 左旋转字符串
-   ```
-    题目：
-
-    汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的
-    字符序列 S，请你把其循环左移 K 位后的序列输出。例如，字符序列 S=”abcXYZdef”，要求输出循环左移3位后的结果，即 “X
-    YZdefabc”。是不是很简单？OK，搞定它！
-
-
-    思路：
-
-    字符串裁剪后拼接
-   ```
-
-#### 44. 翻转单词顺序列
-   ```
-    题目：
-
-    牛客最近来了一个新员工 Fish，每天早晨总是会拿着一本英文杂志，写些句子在本子上。同事 Cat 对 Fish 写的内容颇感兴趣，有
-    一天他向 Fish 借来翻看，但却读不懂它的意思。例如，“student. a am I”。后来才意识到，这家伙原来把句子单词的顺序翻转了
-    ，正确的句子应该是“I am a student.”。Cat 对一一的翻转这些单词顺序可不在行，你能帮助他么？
-
-
-    思路：
-
-    通过空格将单词分隔，然后将数组反序后，重新拼接为字符串。
-   ```
 
 #### 45. 扑克牌的顺子
    ```
