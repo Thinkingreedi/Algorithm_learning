@@ -2,19 +2,346 @@
 
 ## 一、异步&事件循环
 
+~~~js
+const promise = new Promise((resolve, reject) => {
+  console.log(1);
+  console.log(2);
+});
+promise.then(() => {
+  console.log(3);
+});
+console.log(4);
+
+1 
+2 
+4
+~~~
+
+* promise.then 是微任务，它会在所有的宏任务执行完之后才会执行**(执行顺序)**；同时需要promise内部的状态发生变化，因为这里内部没有发生变化**(状态变化)**，一直处于pending状态；所以不输出3。
 
 
 
+~~~js
+const promise1 = new Promise((resolve, reject) => {
+  console.log('promise1')
+  resolve('resolve1')	//状态变化
+})
+const promise2 = promise1.then(res => {
+  console.log(res)
+})
+console.log('1', promise1);
+console.log('2', promise2);
+
+promise1
+1 Promise{<resolved>: resolve1}
+2 Promise{<pending>}
+resolve1
+~~~
+
+* **直接打印promise，会打印出它的状态值和参数。**
+
+
+
+~~~js
+const promise = new Promise((resolve, reject) => {
+  console.log(1);
+  setTimeout(() => {	//宏任务
+    console.log("timerStart");
+    resolve("success");	//状态变化
+    console.log("timerEnd");
+  }, 0);
+  console.log(2);
+});
+promise.then((res) => {
+  console.log(res);
+});
+console.log(4);
+
+1
+2
+4
+timerStart
+timerEnd
+success
+~~~
+
+* **宏任务与微任务**
+
+
+
+~~~js
+const promise = new Promise((resolve, reject) => {
+    resolve('success1');
+    reject('error');
+    resolve('success2');
+});
+promise.then((res) => {
+    console.log('then:', res);
+}).catch((err) => {
+    console.log('catch:', err);
+})
+
+then：success1
+~~~
+
+* **Promise的状态在发生变化之后，就不会再发生变化**
+
+
+
+~~~js
+Promise.resolve(1)
+  .then(res => {
+    console.log(res);
+    return 2;
+  })
+  .catch(err => {
+    return 3;
+  })
+  .then(res => {
+    console.log(res);
+  });
+
+1   
+2
+~~~
+
+* `resolve(1)`之后走的是第一个then方法，并没有进catch里，所以第二个then中的res得到的实际上是第一个then的返回值**（入口）**。并且return 2会被包装成`resolve(2)`，被最后的then打印输出2。
+
+
+
+~~~js
+Promise.resolve().then(() => {
+  return new Error('error!!!')
+}).then(res => {
+  console.log("then: ", res)
+}).catch(err => {
+  console.log("catch: ", err)
+})
+
+"then: " "Error: error!!!"
+~~~
+
+* **返回任意一个非 promise 的值都会被包裹成 promise 对象**，因此这里的`return new Error('error!!!')`也被包裹成了`return Promise.resolve(new Error('error!!!'))`，因此它会被then捕获而不是catch。
+
+
+
+~~~js
+const promise = Promise.resolve().then(() => {
+  return promise;
+})
+promise.catch(console.err)
+
+Uncaught (in promise) TypeError: Chaining cycle detected for promise #<Promise>
+~~~
+
+* **`.then` 或 `.catch` 返回的值不能是 promise 本身**，否则会造成死循环。
+
+
+
+~~~js
+Promise.resolve(1)
+  .then(2)
+  .then(Promise.resolve(3))
+  .then(console.log)
+
+1
+~~~
+
+* `.then` 或`.catch` 的参数期望是函数，传入非函数则会发生**值透传**。
+
+
+
+~~~js
+Promise.resolve('1')
+  .then(res => {
+    console.log(res)
+  })
+  .finally(() => {
+    console.log('finally')
+  })
+Promise.resolve('2')
+  .finally(() => {
+    console.log('finally2')
+  	return '我是finally2返回的值'
+  })
+  .then(res => {
+    console.log('finally2后面的then函数', res)
+  })
+
+1
+finally2
+finally
+finally2后面的then函数 2
+~~~
+
+* `.finally()`方法不管Promise对象最后的状态如何都会执行**（总会执行）**
+* `.finally()`方法的回调函数不接受任何的参数，也就是说你在`.finally()`函数中是无法知道Promise最终的状态是`resolved`还是`rejected`的**（参数无效）**
+* 它最终返回的默认会是一个上一次的Promise对象值，不过如果抛出的是一个异常则返回异常的Promise对象**（返回Promise）**
+* finally本质上是then方法的特例**（形同then）**
+
+
+
+~~~js
+function runAsync (x) {
+    const p = new Promise(r => setTimeout(() => r(x, console.log(x)), 1000))
+    return p
+}
+
+Promise.all([runAsync(1), runAsync(2), runAsync(3)]).then(res => console.log(res))
+
+1
+2
+3
+[1, 2, 3]
+~~~
+
+* **一秒之后**输出了1，2，3，**同时输出**了数组[1, 2, 3]，三个函数是同步执行的，并且在一个回调函数中返回了所有的结果
+
+
+
+~~~js
+function runAsync (x) {
+  const p = new Promise(r => setTimeout(() => r(x, console.log(x)), 1000))
+  return p
+}
+Promise.race([runAsync(1), runAsync(2), runAsync(3)])
+  .then(res => console.log('result: ', res))
+  .catch(err => console.log(err))
+~~~
+
+* **then只会捕获第一个成功的方法**，其他的函数虽然还会继续执行，但不是被then捕获
 
 
 
 ## 二、this
 
+~~~js
+function foo() {
+  console.log( this.a );
+}
+
+function doFoo() {
+  foo();
+}
+
+var obj = {
+  a: 1,
+  doFoo: doFoo
+};
+
+var a = 2; 
+obj.doFoo()
+
+2
+~~~
+
+* this指向函数执行时的当前对象。在执行foo的时候，执行环境就是doFoo函数，**执行环境为全局**。所以，foo中的**this是指向window**的，所以会打印出2。
 
 
 
+~~~js
+var a = 10
+var obj = {
+  a: 20,
+  say: () => {
+    console.log(this.a)
+  }
+}
+obj.say() 
+
+var anotherObj = { a: 30 } 
+obj.say.apply(anotherObj) 
+
+10 10
+~~~
+
+* **箭头函数是不绑定this的，它的this来自原其父级所处的上下文**；如果是普通函数输出就是20,30
 
 
+
+~~~js
+function a() {
+  console.log(this);
+}
+a.call(null);
+
+window对象
+~~~
+
+* **规定：如果第一个参数传入的对象调用者是null或者undefined，call方法将把全局对象（浏览器上是window对象）作为this的值**
+
+
+
+~~~js
+var obj = { 
+  name : 'cuggz', 
+  fun : function(){ 
+    console.log(this.name); 
+  } 
+} 
+obj.fun()     // cuggz
+new obj.fun() // undefined
+~~~
+
+* 使用**new**构造函数时，其**this指向的是全局环境window**
+
+
+
+~~~js
+var myObject = {
+    foo: "bar",
+    func: function() {
+        var self = this;
+        console.log(this.foo);  
+        console.log(self.foo);  
+        (function() {
+            console.log(this.foo);  
+            console.log(self.foo);  
+        }());
+    }
+};
+myObject.func();
+
+bar bar undefined bar
+~~~
+
+* **立即执行匿名函数**表达式是由window调用的，**this指向window**，所以输出为undefined
+
+
+
+~~~js
+function a(xx){
+  this.x = xx;
+  return this
+};
+var x = a(5);
+var y = a(6);
+
+console.log(x.x)  // undefined
+console.log(y.x)  // 6
+~~~
+
+* 这里函数内部的this指向window对象
+
+
+
+~~~js
+function foo(something){
+    this.a = something
+}
+
+var obj1 = {}
+
+var bar = foo.bind(obj1);
+bar(2);
+console.log(obj1.a); // 2
+
+var baz = new bar(3);
+console.log(obj1.a); // 2
+console.log(baz.a); // 3
+~~~
+
+* **this绑定的优先级：new绑定 > 显式绑定 > 隐式绑定 > 默认绑定**
 
 
 
@@ -148,20 +475,25 @@ function Person(name) {
     this.name = name
 }
 var p2 = new Person('king');
+
 console.log(p2.__proto__) //Person.prototype
 console.log(p2.__proto__.__proto__) //Object.prototype
 console.log(p2.__proto__.__proto__.__proto__) // null
 console.log(p2.__proto__.__proto__.__proto__.__proto__)//null后面没有了，报错
 console.log(p2.__proto__.__proto__.__proto__.__proto__.__proto__)//null后面没有了，报错
+
 console.log(p2.constructor)//Person
 console.log(p2.prototype)//undefined p2是实例，没有prototype属性
+
 console.log(Person.constructor)//Function 一个空函数
 console.log(Person.prototype)//打印出Person.prototype这个对象里所有的方法和属性
 console.log(Person.prototype.constructor)//Person
 console.log(Person.prototype.__proto__)// Object.prototype
 console.log(Person.__proto__) //Function.prototype
+
 console.log(Function.prototype.__proto__)//Object.prototype
 console.log(Function.__proto__)//Function.prototype
+
 console.log(Object.__proto__)//Function.prototype
 console.log(Object.prototype.__proto__)//null
 ~~~
@@ -170,7 +502,7 @@ console.log(Object.prototype.__proto__)//null
 
 
 
-~~~
+~~~js
 // a
 function Foo () {
  getName = function () {
