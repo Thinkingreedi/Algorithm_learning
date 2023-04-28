@@ -632,3 +632,155 @@ console.log(Dog.prototype.constructor === Dog && dog.constructor === Dog && dog 
 
 * 因为constructor是prototype上的属性，所以dog.constructor实际上就是指向Dog.prototype.constructor；constructor属性指向构造函数。instanceof而实际检测的是类型是否在实例的原型链上。
 * constructor是prototype上的属性，这一点很容易被忽略掉。constructor和instanceof 的作用是不同的，感性地来说，constructor的限制比较严格，它只能严格对比对象的构造函数是不是指定的值；而instanceof比较松散，只要检测的类型在原型链上，就会返回true。
+
+
+
+## 五、真题
+
+**= = 和 = = =的区别，undefined = = = null(false)、undefined = = null(true)、[] = = = ''(false)、[] = = ''(true)**
+
+**var a = 1(number)；var b = new Number(1);(object) 使用typeof两者分别输出什么**
+
+**JS原型链相关问题**
+
+~~~js
+let a=1;
+console.log(a);
+
+let b=setTimeout(function(){
+    console.log('2');
+},0);
+
+let c=new Promise(function(resolve,reject){
+    console.log('3');
+    resolve();
+})
+
+let d=setTimeout(function(){
+    console.log('4');
+},0);
+
+c.then(()=>{
+    console.log('5');
+})
+//1 3 5 4 2 事件循环机制 宏任务 -- 微任务 -- 下一轮
+~~~
+
+~~~js
+var a
+if(!a){
+var a = 2
+  console.log(a)
+}
+a=1
+console.log(a)
+//2 1
+~~~
+
+~~~js
+var data = [];
+
+for (var i = 0; i < 3; i++) {
+  data[i] = function () {
+    console.log(i);
+  };
+}
+
+data[0]();
+data[1]();
+data[2]();  // 333 var函数作用域
+~~~
+
+~~~js
+let x = 3;
+function fn(x) {
+    return function(y) {
+        console.log(y + (++x));
+    }
+}
+let f = fn(4)(5);
+console.log(x);// 10 3
+~~~
+
+~~~js
+"use strict";
+var name = 'window'
+
+var person1 = {
+  name: 'person1',
+  show1: function () {
+    console.log(this.name)
+  },
+  show2: () => console.log(this.name),
+  show3: function () {
+    return function () {
+      console.log(this.name)
+    }
+  },
+  show4: function () {
+    return () => console.log(this.name)
+  }
+}
+var person2 = { name: 'person2' }
+
+person1.show1() // person1 正常
+person1.show1.call(person2) // person2 绑定
+
+person1.show2() // window 箭头函数没this
+person1.show2.call(person2) // window 箭头函数不能改this
+
+person1.show3()() // window this指向的是全局对象
+person1.show3().call(person2) // person2
+~~~
+
+~~~js
+var a = 1;
+function fnB() {
+	var a = 2;
+	return () => {
+		a++;
+		console.log(a);
+		fnA();
+	};
+}
+function fnA() {
+	console.log(a);
+}
+fnB()();
+//3 1
+~~~
+
+~~~js
+var a = 1;
+console.log(a);
+
+setTimeout(()=> {
+  console.log(2);
+}, 0);
+
+function func2() {
+  console.log(3);
+}
+
+async function func1() { // 注意这里会返回一个promise，也是异步任务/微任务
+  await func2();
+  console.log(4);
+}
+
+var b = new Promise((resolve)=> {
+    console.log(5);
+   resolve();
+});
+
+setTimeout(()=> {
+    console.log(6);
+}, 0);
+
+b.then(()=> {
+   console.log(7);
+});
+
+func1();
+
+// 输出 1 5 3 4 7 2 6
+~~~
