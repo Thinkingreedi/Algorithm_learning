@@ -635,7 +635,7 @@ console.log(Dog.prototype.constructor === Dog && dog.constructor === Dog && dog 
 
 
 
-## 五、真题
+## 五、笔试真题
 
 **= = 和 = = =的区别，undefined = = = null(false)、undefined = = null(true)、[] = = = ''(false)、[] = = ''(true)**
 
@@ -663,7 +663,7 @@ let d=setTimeout(function(){
 c.then(()=>{
     console.log('5');
 })
-//1 3 5 4 2 事件循环机制 宏任务 -- 微任务 -- 下一轮
+//1 3 5 4 2 事件循环机制 宏任务 -- 微任务 -- 下一轮(出入栈)
 ~~~
 
 ~~~js
@@ -782,7 +782,7 @@ b.then(()=> {
 
 func1();
 
-// 输出 1 5 3 4 7 2 6
+// 输出 1 5 3 4 7 6 2
 ~~~
 
 
