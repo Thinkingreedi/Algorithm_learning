@@ -1,13 +1,4 @@
-* **答案的对错很多时候并不重要，重要的是你在回答的过程中展现了多少你的思考**
-* **不怕做不对，就怕不表达**
-
-
-
-# 二分查找
-
-* 有序、数组、查找
-
-~~~js
+// 二分查找
 function search(nums, target) {
     let low = 0, high = nums.length - 1
     while (low <= high) {
@@ -23,19 +14,11 @@ function search(nums, target) {
     }
     return - 1
 }
-~~~
-
-# 排序
-
-~~~js
-arr.sort((a,b) => {
+// 排序
+arr.sort((a, b) => {
     return a - b
 })
-~~~
-
-# 冒泡排序
-
-~~~js
+// 冒泡排序
 function bubbleSort(arr) {
     let len = arr.length
     for (let i = 0; i < len; i++) {
@@ -47,11 +30,7 @@ function bubbleSort(arr) {
     }
     return arr
 }
-~~~
-
-# 选择排序
-
-~~~js
+// 选择排序
 function selectSort(arr) {
     let len = arr.length
     let minIndex
@@ -66,11 +45,7 @@ function selectSort(arr) {
     }
     return arr
 }
-~~~
-
-# 快速排序
-
-~~~js
+// 快速排序
 function quickSort(arr) {
     if (arr.length <= 1) {
         return arr
@@ -89,11 +64,7 @@ function quickSort(arr) {
     }
     return quickSort(left).concat([pivot], quickSort(right))
 }
-~~~
-
-# 回文数
-
-~~~js
+// 回文数
 function isPalindrome(x) {
     if (x < 0) {
         return false
@@ -103,11 +74,7 @@ function isPalindrome(x) {
         return x.toString().split("").reverse().join("") === x
     }
 }
-~~~
-
-# 爬楼梯
-
-~~~js
+// 爬楼梯
 function climbStairs(n) {
     const f = []
     f[1] = 1
@@ -117,11 +84,7 @@ function climbStairs(n) {
     }
     return f[n]
 }
-~~~
-
-# 接雨水
-
-~~~js
+// 接雨水
 function trap(height) {
     let leftCur = 0
     let rightCur = height.length - 1
@@ -143,11 +106,7 @@ function trap(height) {
     }
     return res
 }
-~~~
-
-# 千位分隔符
-
-~~~js
+// 千位分隔符
 function thousandSeparator(n) {
     const str = n.toString()
     const arr = []
@@ -156,19 +115,11 @@ function thousandSeparator(n) {
     }
     return arr.join('.')
 }
-~~~
-
-# 替换空格
-
-~~~js
+// 替换空格
 function replaceSpace(s) {
     return s.replace(/ /g, "%20")
 }
-~~~
-
-# 反转字符串
-
-~~~js
+// 反转字符串
 function reverseString(s) {
     reverse(s)
 }
@@ -178,11 +129,7 @@ function reverse(s) {
         [s[l], s[r]] = [s[r], s[l]]
     }
 }
-~~~
-
-# 回文字符串
-
-~~~js
+// 回文字符串
 function isPalindrome(str) {
     for (let i = 0; i < len / 2; i++) {
         if (str[i] !== str[len - i - 1]) {
@@ -191,11 +138,7 @@ function isPalindrome(str) {
     }
     return true
 }
-~~~
-
-# 有效括号对
-
-~~~js
+// 有效括号对
 const leftToRight = {
     "(": ")",
     "[": "]",
@@ -222,11 +165,7 @@ function isValid(s) {
     }
     return !stack.length
 }
-~~~
-
-# 栈模拟队列
-
-~~~js
+// 栈模拟队列
 function CQuene() {
     this.stackA = []
     this.stackB = []
@@ -248,11 +187,7 @@ CQuene.prototype.deleteHead = function () {
         }
     }
 }
-~~~
-
-# 两数之和
-
-~~~js
+// 两数之和
 function twoSum(nums, target) {
     const map = new Map()
     for (let i = 0; i < nums.length; i++) {
@@ -264,11 +199,7 @@ function twoSum(nums, target) {
         }
     }
 }
-~~~
-
-# 合并有序数组
-
-~~~js
+// 合并有序数组
 function merge(nums1, m, nums2, n) {
     let i = m - 1, j = n - 1, k = m + n - 1
     while (i >= 0 && j >= 0) {
@@ -288,16 +219,11 @@ function merge(nums1, m, nums2, n) {
         j--
     }
 }
---------------------------------------
 function merge(nums1, m, nums2, n) {
     nums1.splice(m, nums1.length - m, ...nums2);
     nums1.sort((a, b) => a - b)
 }
-~~~
-
-# 数组中数字出现次数
-
-~~~js
+// 数组中数字出现次数
 function singleNumbers(nums) {
     let numsSort = nums.sort((a, b) => { return a - b }), result = []
     for (let i = 0; i < numsSort.length; i++) {
@@ -311,37 +237,11 @@ function singleNumbers(nums) {
     }
     return result
 }
-~~~
-
-# 字符串去重
-
-~~~js
+// 字符串去重
 function duplicateRemoval(str) {
     return [...new Set(str.split(""))].join("")
 }
-~~~
-
-# 最长不含重复字符的子字符串
-
-~~~js
-var lengthOfLongestSubstring = function(s) {
-    let arr = [];
-    let max = 0;
-    for(let item of s){
-        if(arr.includes(item)){
-            let index = arr.indexOf(item);
-            arr.splice(0, index + 1);
-        }
-        arr.push(item);
-        max = max > arr.length ? max : arr.length;
-    }
-    return max;
-};
-~~~
-
-# 最长递增子序列
-
-~~~js
+// 最长递增子序列
 function lengthOfLIS(nums) {
     const dp = new Array(nums.length).fill(1)
     for (let i = 1; i < nums.length; i++) {
@@ -353,24 +253,7 @@ function lengthOfLIS(nums) {
     }
     return Math.max(...dp)
 }
-~~~
-
-# 链表节点
-
-~~~js
-function ListNode(val) {
-    this.val = val;
-    this.next = null;
-}
-
-//创建出了一个数据域值为1，next 结点数据域值为2的链表结点
-const node = new ListNode(1)  
-node.next = new ListNode(2)
-~~~
-
-# 删除链表节点
-
-~~~js
+// 删除链表节点
 function deleteNode(head, val) {
     let dummy = new ListkNode()
     dummy.next = head
@@ -384,11 +267,7 @@ function deleteNode(head, val) {
     }
     return dummy.next
 }
-~~~
-
-# 反转链表
-
-~~~js
+// 反转链表
 function reverseList(head) {
     let pre = null;
     let cur = head;
@@ -400,11 +279,7 @@ function reverseList(head) {
     }
     return pre;
 }
-~~~
-
-# 合并两个有序链表
-
-~~~js
+// 合并两个有序链表
 function mergeTwoLists(l1, l2) {
     let head = new ListNode()
     let cur = head
@@ -421,11 +296,7 @@ function mergeTwoLists(l1, l2) {
     cur.next = l1 !== null ? l1 : l2
     return head.next
 }
-~~~
-
-# 删除链表重复元素
-
-~~~js
+// 删除链表重复元素
 function deleteDuplicates(head) {
     let cur = head
     while (cur != null && cur.next != null) {
@@ -437,11 +308,7 @@ function deleteDuplicates(head) {
     }
     return head
 }
-~~~
-
-# 环形链表
-
-~~~js
+// 环形链表
 function hasCycle(head) {
     while (head) {
         if (head.flag) {
@@ -453,23 +320,7 @@ function hasCycle(head) {
     }
     return false;
 }
-~~~
-
-# 二叉树节点
-
-~~~js
-// 二叉树结点的构造函数
-function TreeNode(val) {
-    this.val = val;
-    this.left = this.right = null;
-}
-
-const node  = new TreeNode(1)
-~~~
-
-# 对称二叉树
-
-~~~js
+// 对称二叉树
 function isSymmetric(root) {
     return isSymmetricCore(root, root)
 }
@@ -482,11 +333,7 @@ function isSymmetricCore(n1, n2) {
         return false;
     return isSymmetricCore(n1.left, n2.right) && isSymmetricCore(n1.right, n2.left)
 }
-~~~
-
-# 翻转二叉树
-
-~~~js
+// 翻转二叉树
 function invertTree(root) {
     if (!root) {
         return root;
@@ -497,11 +344,7 @@ function invertTree(root) {
     root.right = left;
     return root;
 }
-~~~
-
-# 中序遍历二叉树
-
-~~~js
+// 中序遍历二叉树
 function inorderTraversal(root) {
     const res = []
     const stack = []
@@ -517,11 +360,7 @@ function inorderTraversal(root) {
     }
     return res
 }
-~~~
-
-# 层序遍历二叉树
-
-~~~js
+// 层序遍历二叉树
 function levelOrder(root) {
     const res = []
     if (!root) {
@@ -546,11 +385,7 @@ function levelOrder(root) {
     }
     return res
 }
-~~~
-
-# 验证二叉搜索树
-
-~~~js
+// 验证二叉搜索树
 function isValidBST(root) {
     function dfs(root, minValue, maxValue) {
         if (!root) {
@@ -562,33 +397,24 @@ function isValidBST(root) {
     }
     return dfs(root, -Infinity, Infinity)
 }
-~~~
-
-# 二叉树最近公共祖先
-
-~~~js
-var lowestCommonAncestor = function(root, p, q) {
-    if(!root || root === p || root === q) return root;
-    let left = lowestCommonAncestor(root.left, p ,q);
+// 二叉树最近公共祖先
+function lowestCommonAncestor(root, p, q) {
+    if (!root || root === p || root === q) return root;
+    let left = lowestCommonAncestor(root.left, p, q);
     let right = lowestCommonAncestor(root.right, p, q);
-    if(!left) return right;
-    if(!right) return left;
+    if (!left) return right;
+    if (!right) return left;
     return root;
-};
-~~~
+}
 
 
 
 
-
-# ----------------
-
+// -----------------------------
 
 
 
-# 手写防抖
-
-~~~js
+// 手写防抖
 function debounce(callback, time) {
     let timer = null;
     return function (e) {
@@ -601,11 +427,7 @@ function debounce(callback, time) {
         }, time);
     }
 }
-~~~
-
-# 手写节流
-
-~~~js
+// 手写节流
 function throttle(callback, wait) {
     let strat = Date.now();
     return function (e) {
@@ -616,11 +438,7 @@ function throttle(callback, wait) {
         }
     }
 }
-~~~
-
-# 手写call函数
-
-~~~js
+// 手写call函数
 Function.prototype.myCall = function (content) {
     if (typeof this !== "function") {
         console.log("type error");
@@ -632,11 +450,7 @@ Function.prototype.myCall = function (content) {
     delete content.fn;
     return result;
 }
-~~~
-
-# 手写apply函数
-
-~~~js
+// 手写apply函数
 Function.prototype.myApply = function (content) {
     if (typeof this !== "function") {
         console.log("type error");
@@ -652,11 +466,7 @@ Function.prototype.myApply = function (content) {
     delete content.fn;
     return result;
 }
-~~~
-
-# 手写bind函数
-
-~~~js
+// 手写bind函数
 Function.prototype.myBind = function (content) {
     if (typeof this !== "function") {
         console.log("type error");
@@ -670,11 +480,7 @@ Function.prototype.myBind = function (content) {
         )
     }
 }
-~~~
-
-# 函数柯里化实现
-
-~~~js
+// 函数柯里化实现
 function curry(fn) {
     return function curried(...args1) {
         if (args1.length >= fn.length) {
@@ -686,196 +492,9 @@ function curry(fn) {
         }
     };
 }
-~~~
-
-# 手写Promise
-
-~~~js
-//声明构造函数 -- executor 会在 Promise 内部立即同步调用,异步操作在执行器中执行
-function Promise(executor) {
-    //添加属性
-    this.PromiseState = 'pending';//值只能为：resolved rejected
-    this.PromiseResult = null;
-    //声明属性 -- 数组
-    this.callbacks = [];
-    //保存实例对象的 this 的值
-    const self = this;//self _this that -- this指向问题
-    //resolve 函数
-    function resolve(data) {
-        //判断状态 -- 无论失败还是成功一个promise对象只能改变一次
-        if (self.PromiseState !== 'pending') return;
-        //1. 修改对象的状态 (promiseState)
-        self.PromiseState = 'fulfilled';// === resolved
-        //2. 设置对象结果值 (promiseResult)
-        self.PromiseResult = data;
-        //改变状态之后 -- 调用成功的回调函数 -- 遍历让多个回调都执行
-        setTimeout(() => {
-            self.callbacks.forEach(item => {
-                item.onResolved(data);
-            });
-        });
-    }
-    //reject函数 -- 失败
-    function reject(data) {
-        //判断状态 -- 无论失败还是成功一个promise对象只能改变一次
-        if (self.PromiseState !== 'pending') return;
-        //1. 修改对象的状态 (promiseState)
-        self.PromiseState = 'rejected';// 
-        //2. 设置对象结果值 (promiseResult)
-        self.PromiseResult = data;
-        //改变状态之后 -- 调用失败的回调函数 -- 遍历让多个回调都执行
-        setTimeout(() => {
-            self.callbacks.forEach(item => {
-                item.onRejected(data);
-            });
-        })
-    }
-    try {
-        //同步调用『执行器函数』
-        executor(resolve, reject);
-    } catch (e) {
-        //修改 promise 对象状态为『失败』
-        reject(e);
-    }
-}
-
-//添加 then 方法 -- 用于得到成功value 的成功回调和用于得到失败reason的失败回调返回一个新的promise对象
-Promise.prototype.then = function (onResolved, onRejected) {
-    const self = this;
-    //判断回调函数参数
-    if (typeof onRejected !== 'function') {
-        onRejected = reason => {
-            throw reason;
-        }
-    }
-    if (typeof onResolved !== 'function') {
-        onResolved = value => value;
-        //value => { return value};
-    }
-    return new Promise((resolve, reject) => {
-        //封装函数
-        function callback(type) {
-            try {
-                //获取回调函数的执行结果
-                let result = type(self.PromiseResult);
-                //判断
-                if (result instanceof Promise) {
-                    //如果是 Promise 类型的对象
-                    result.then(v => {
-                        resolve(v);
-                    }, r => {
-                        reject(r);
-                    })
-                } else {
-                    //结果的对象状态为『成功』
-                    resolve(result);
-                }
-            } catch (e) {
-                reject(e);
-            }
-        }
-        //调用回调函数  PromiseState
-        if (this.PromiseState === 'fulfilled') {
-            setTimeout(() => {
-                callback(onResolved);
-            })
-        }
-        if (this.PromiseState === 'rejected') {
-            setTimeout(() => {
-                callback(onRejected);
-            })
-        }
-        //判断 pending 状态
-        if (this.PromiseState === 'pending') {
-            //保存回调函数
-            this.callbacks.push({
-                onResolved: function () {
-                    callback(onResolved);
-                },
-                onRejected: function () {
-                    callback(onRejected);
-                }
-            });
-        }
-    })
-}
-
-//添加 catch 方法
-Promise.prototype.catch = function (onRejected) {
-    return this.then(undefined, onRejected);
-}
-
-//添加 resolve 方法 -- 返回一个成功/失败的promise对象
-Promise.resolve = function (value) {
-    //返回promise对象
-    return new Promise((resolve, reject) => {
-        if (value instanceof Promise) {
-            value.then(v => {
-                resolve(v);
-            }, r => {
-                reject(r);
-            })
-        } else {
-            //状态设置为成功
-            resolve(value);
-        }
-    });
-}
-
-//添加 reject 方法 -- 返回一个失败的promise对象
-Promise.reject = function (reason) {
-    return new Promise((resolve, reject) => {
-        reject(reason);
-    });
-}
-
-//添加 all 方法 -- 返回一个新的promise，只有所有的promise都成功才成功，只要有一个失败了就直接失败
-Promise.all = function (promises) {
-    //返回结果为promise对象
-    return new Promise((resolve, reject) => {
-        //声明变量
-        let count = 0;
-        let arr = [];
-        //遍历
-        for (let i = 0; i < promises.length; i++) {
-            //
-            promises[i].then(v => {
-                //得知对象的状态是成功
-                //每个promise对象 都成功
-                count++;
-                //将当前promise对象成功的结果 存入到数组中
-                arr[i] = v;
-                //判断
-                if (count === promises.length) {
-                    //修改状态
-                    resolve(arr);
-                }
-            }, r => {
-                reject(r);
-            });
-        }
-    });
-}
-
-//添加 race 方法 -- 返回一个新的promise，第一个完成的promise 的结果状态就是最终的结果状态
-Promise.race = function (promises) {
-    return new Promise((resolve, reject) => {
-        for (let i = 0; i < promises.length; i++) {
-            promises[i].then(v => {
-                //修改返回对象的状态为 『成功』
-                resolve(v);
-            }, r => {
-                //修改返回对象的状态为 『失败』
-                reject(r);
-            })
-        }
-    });
-}
-~~~
-
-# 手写浅拷贝
-
-~~~js
+// 手写Promise
+// ...
+// 手写浅拷贝
 function shallowCopy(object) {
     if (!object || typeof object !== "object")
         return;
@@ -887,11 +506,7 @@ function shallowCopy(object) {
     }
     return newObject;
 }
-~~~
-
-# 手写深拷贝
-
-~~~js
+// 手写深拷贝
 function deepCopy(object) {
     if (!object || typeof object !== "object")
         return;
@@ -903,11 +518,7 @@ function deepCopy(object) {
     }
     return newObject;
 }
-~~~
-
-# 实现数组的flat方法
-
-~~~js
+// 实现数组的flat方法
 function myFlat(arr, depth) {
     if (!Array.isArray(arr) || depth <= 0)
         return arr;
@@ -919,11 +530,7 @@ function myFlat(arr, depth) {
         }
     }, [])
 }
-~~~
-
-# 解析URL Params为对象
-
-~~~js
+// 解析URL Params为对象
 function parseParam(url) {
     const paramsStr = /.+\?(.+)$/.exec(url)[1];
     const paramsArr = paramsStr.split('&');
@@ -944,12 +551,7 @@ function parseParam(url) {
     })
     return paramsObj;
 }
-~~~
-
-# 手写红黄绿灯
-
-~~~js
-//红黄绿:使用异步编程方案;循环打印:一轮打印完了以后递归重复这一过程使用异步编程方案
+// 手写红黄绿灯
 const taskRunner = (light, timeout) => {
     return new Promise((resolve) => {
         setTimeout(() => resolve(console.log(light)), timeout);
@@ -963,11 +565,7 @@ const task = async () => {
 }
 
 task()
-~~~
-
-# 手写实现发布-订阅模式
-
-~~~js
+// 手写实现发布-订阅模式
 class EventCenter {
     // 1.定义事件容器
     constructor() {
@@ -1014,33 +612,27 @@ class EventCenter {
         }
     }
 }
-~~~
-
-# 实现双向数据绑定
-
-~~~html
+// 实现双向数据绑定
 <body>
     <input type="text" id="input">
-    <span id="span"></span>
+        <span id="span"></span>
 
-    <script>
-        let obj = {}
-        let input = document.getElementById('input')
-        let sapn = document.getElementById('span')
-        Object.defineProperty(obj, 'text', {
-            get() {
+        <script>
+            let obj = { }
+            let input = document.getElementById('input')
+            let sapn = document.getElementById('span')
+            Object.defineProperty(obj, 'text', {
+                get() {
                 console.log('获取数据了')
             },
             set(newVal) {
                 console.log('获取数据了')
                 input.value = newVal
-                span.innerHTML = newVal
+            span.innerHTML = newVal
             }
         })
-        input.addEventListener('keyup', function (e) {
-            obj.text = e.target.value
-        })
-    </script>
+            input.addEventListener('keyup', function (e) {
+                obj.text = e.target.value
+            })
+        </script>
 </body>
-~~~
-
